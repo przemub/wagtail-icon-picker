@@ -1,8 +1,11 @@
 from wagtail.admin.edit_handlers import FieldPanel
 
-from wagtail_icon_picker.widgets import BoxIconPickerWidget, BootstrapIconPickerWidget, IcofontPickerWidget, \
-    FontAwesomeIconPickerWidget, BoxIconsInputWidget, BootstrapIconsInputWidget, IcofontInputWidget, \
-    FontAwesomeIconsInputWidget
+from wagtail_icon_picker.widgets import BoxIconPickerWidget, \
+    BootstrapIconPickerWidget, IcofontPickerWidget, \
+    FontAwesomeIconPickerWidget, BoxIconsInputWidget, \
+    BootstrapIconsInputWidget, IcofontInputWidget, \
+    FontAwesomeIconsInputWidget, MaterialDesignIconsPickerWidget, \
+    MaterialDesignIconsInputWidget
 
 
 class BootstrapIconPickerPanel(FieldPanel):
@@ -58,4 +61,18 @@ class IcofontIconInputPanel(FieldPanel):
     def widget_overrides(self):
         return {
             self.field_name: IcofontInputWidget(),
+        }
+
+
+class MaterialDesignIconsPickerPanel(FieldPanel):
+    def widget_overrides(self):
+        return {
+            self.field_name: MaterialDesignIconsPickerWidget(),
+        }
+
+
+class MaterialDesignIconsInputPanel(FieldPanel):
+    def widget_overrides(self):
+        return {
+            self.field_name: MaterialDesignIconsInputWidget(),
         }

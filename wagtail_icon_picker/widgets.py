@@ -281,3 +281,74 @@ class IcofontPickerWidget(widgets.TextInput):
             },
             js=["wagtail_icon_picker/iconpicker.js"]
         )
+
+
+class MaterialDesignIconsInputWidget(widgets.TextInput):
+    class Media:
+        css = {
+            "all": (
+                "https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css",
+                "wagtail_icon_picker/css/icon-picker-widget.css",
+                "wagtail_icon_picker/css/materialdesignicons.css",
+            )
+        }
+
+        js = "wagtail_icon_picker/iconpicker.js"
+
+    def render(self, name, value, attrs=None, renderer=None):
+        out = super().render(name, value, attrs, renderer=renderer)
+        field_id = attrs["id"]
+
+        return mark_safe(
+            out
+            + """
+            <script>
+            (async () => {
+                const response = await fetch('__ICONS_JSON__')
+                const result = await response.json()
+                const exValue = document.getElementById("{{ widget_id }}").value?document.getElementById("{{ widget_id }}").value:'mdi-book-open-page-variant';
+
+                const iconpicker = new Iconpicker(document.querySelector("#{{ widget_id }}"), {
+                    icons: result,
+                    showSelectedIn: document.querySelector("#{{ widget_id }}-icon"),
+                    searchable: true,
+                    selectedClass: "selected",
+                    containerClass: "my-picker",
+                    hideOnSelect: true,
+                    fade: true,
+                    defaultValue: exValue,
+                    valueFormat: val => `${val}`
+                });
+
+                iconpicker.set() // Set as empty
+                iconpicker.set('mdi-book-open-page-variant') // Reset with a value
+            })();
+            </script>
+            """.replace(
+                "__ICONS_JSON__", "wagtail_icon_picker/iconsets/materialdesignicons.json"
+            )
+        )
+
+class MaterialDesignIconsPickerWidget(widgets.TextInput):
+    template_name = "wagtail_icon_picker/widgets/material-design-icons-picker-widget.html"
+
+    def __init__(self, attrs=None):
+        default_attrs = {
+            "class": "icon-picker-widget__text-input",
+        }
+        attrs = attrs or {}
+        attrs = {**default_attrs, **attrs}
+        super().__init__(attrs=attrs)
+
+    @property
+    def media(self):
+        return Media(
+            css={
+                "all": [
+                    "https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css",
+                    "wagtail_icon_picker/css/icon-picker-widget.css",
+                    "wagtail_icon_picker/css/materialdesignicons.css",
+                ]
+            },
+            js=["wagtail_icon_picker/iconpicker.js"]
+        )
