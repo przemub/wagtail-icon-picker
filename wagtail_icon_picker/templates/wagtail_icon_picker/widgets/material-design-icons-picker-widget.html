@@ -9,7 +9,7 @@
         (async () => {
             const response = await fetch(`{% static 'wagtail_icon_picker/iconsets/materialdesignicons.json' %}`)
             const result = await response.json()
-            const exValue = document.getElementById("{{ widget_id }}").value?document.getElementById("{{ widget_id }}").value.slice(3):'mdi-book-open-page-variant';
+            const exValue = document.getElementById("{{ widget_id }}").value?document.getElementById("{{ widget_id }}").value:'mdi-book-open-page-variant';
 
             const iconpicker = new Iconpicker(document.querySelector("#{{ widget_id }}"), {
                 icons: result,
